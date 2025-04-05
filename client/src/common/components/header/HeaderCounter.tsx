@@ -23,10 +23,10 @@ export default function HeaderCounter() {
     return (
         <Wrapper>
             <Inner>
-                {counterList.map((elem, _) => (
-                    <Counter>
-                        <CounterTitle>{elem.title}</CounterTitle>
-                        <CounterValue>{elem.value}</CounterValue>
+                {counterList.map(({id, title, value}, _) => (
+                    <Counter key={id}>
+                        <CounterTitle>{title}</CounterTitle>
+                        <CounterValue>{value}</CounterValue>
                     </Counter>
                 ))}
             </Inner>
@@ -44,7 +44,9 @@ display: flex;
 column-gap: 20px;
 `;
 
-const Counter = styled('div')``;
+const Counter = styled('div')`
+text-align: center;
+`;
 
 const CounterValue = styled('p')``;
 
