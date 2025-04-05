@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { ITaskCard, PriorityTaskType } from '@/common/components/tasks/types';
-import arrowImg from "@/common/images/svg/arrow-right.svg";
+import { ITaskCard, PriorityColorEnum, PriorityTaskType } from '@/common/components/tasks/types';
 import calendarImg from "@/common/images/svg/calendar.svg";
 import { borders, fonts } from '@/common/styles/styleConstants';
+import { formatSmartDateHelper } from '@/common/helpers/formatSmartDateHelper';
+import TaskCardActions from '@/common/components/tasks/task-card/TaskCardActions';
 
 interface TaskCardProps {
     task: ITaskCard;
@@ -11,21 +12,14 @@ interface TaskCardProps {
 export function TaskCard({ task }: TaskCardProps) {
     const { title, deadline, priority } = task;
 
-    const formatDeadline = (value: string) => {
-        const date = new Date(value);
-        const today = new Date();
-        const isToday = date.toDateString() === today.toDateString();
-        return isToday ? 'Today' : date.toLocaleDateString();
-    };
-
     return (
-        <Card>
+        <Card $priority={priority}>
             <TopRow>
                 <LeftSide>
                     <Icon src={calendarImg} alt='calendar' />
-                    <Text>{formatDeadline(deadline)}</Text>
+                    <Text>{formatSmartDateHelper(deadline)}</Text>
                 </LeftSide>
-                <Icon src={arrowImg} alt='arrow right' />
+                <TaskCardActions />
             </TopRow>
 
             <Title>{title}</Title>
@@ -37,11 +31,11 @@ export function TaskCard({ task }: TaskCardProps) {
 }
 
 
-const Card = styled('div')`
+const Card = styled('div') <{ $priority: PriorityTaskType }>`
 width: 250px;
 height: 150px;
 padding: 10px;
-background-color: #b2ebf2;
+background-color: ${({ $priority }) => PriorityColorEnum[$priority]};
 border-radius: ${borders.radius.medium};
 display: flex;
 flex-direction: column;
@@ -73,24 +67,11 @@ overflow: hidden;
 text-overflow: ellipsis;
 `;
 
-const Priority = styled('div') <{ $priority: PriorityTaskType}>`
+const Priority = styled('div') <{ $priority: PriorityTaskType }>`
 margin-top: auto;
 font-size: ${fonts.sizes.small};
-padding: 4px 8px;
 border-radius: ${borders.radius.small};
 width: fit-content;
-
-background-color: ${({ $priority }) => {
-    switch ($priority) {
-        case 'high':
-            return '#ffcdd2';
-        case 'medium':
-            return '#fff9c4';
-        case 'low':
-        default:
-            return '#b2e8b4';
-    }
-}};
 `;
 
 const Icon = styled('img')`

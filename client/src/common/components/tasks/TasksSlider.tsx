@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { colors, fonts, transitions } from '@/common/styles/styleConstants';
 import styled from 'styled-components';
 import { ITaskCard } from '@/common/components/tasks/types';
-import { TaskCard } from '@/common/components/tasks/TaskCard';
+import { TaskCard } from '@/common/components/tasks/task-card/TaskCard';
 
 interface TasksSliderProps {
     title: string;

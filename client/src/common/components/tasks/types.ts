@@ -14,6 +14,12 @@ export enum PriorityTextEnum {
     'low' = 'Низкий'
 }
 
+export enum PriorityColorEnum {
+    'high' = '#b2ebf2',
+    'medium' = '#ecc36a',
+    'low' = '#bddd7a'
+}
+
 export type StatusTaskType = 'not-started' | 'in-progress' | 'completed';
 
 export enum StatusTextEnum {
