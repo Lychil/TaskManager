@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { ITaskCard, PriorityTextEnum, StatusTextEnum } from '@/common/components/tasks/types';
-import { borders } from '@/common/styles/styleConstants';
+import { borders, colors } from '@/common/styles/styleConstants';
 
 interface TaskCardProps {
     task: ITaskCard
@@ -38,7 +38,8 @@ const Card = styled('div')`
     width: 300px;
     height: 150px;
     border: ${borders.styles.blackSm};
-    border-radius: ${borders.radius.small};
+    border-radius: ${borders.radius.medium};
+    background-color: ${colors.whiteTotal};
     padding: 10px;
 `;
 

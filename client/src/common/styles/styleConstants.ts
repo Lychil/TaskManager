@@ -3,6 +3,7 @@ export const colors = {
     whiteTotal: "rgba(255, 255, 255, 1)",
     lightGray: "rgba(230, 230, 230, 1)",
     blackTotal: "rgba(0, 0, 0, 1)",
+    blackTransparent: "rgba(0, 0, 0, 0.5)"
 };
 
 export const borders = {

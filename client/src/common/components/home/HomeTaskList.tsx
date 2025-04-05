@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { TaskCard } from "../tasks/TaskCard";
+import { TaskCard } from "@/common/components/tasks/TaskCard";
 import { tasks } from "@/common/mock/tasks";
 
 export default function HomeTaskList() {
