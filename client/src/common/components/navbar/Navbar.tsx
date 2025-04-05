@@ -20,6 +20,11 @@ const navList: INavList[] = [
         title: "Задачи",
         to: '/tasks/shedule',
         icon: tasksImg
+    },
+    {
+        title: "Создать",
+        to: '/create',
+        icon: tasksImg
     }
 ]
 
