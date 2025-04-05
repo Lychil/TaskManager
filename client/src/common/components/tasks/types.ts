@@ -20,10 +20,9 @@ export enum PriorityColorEnum {
     'low' = '#bddd7a'
 }
 
-export type StatusTaskType = 'not-started' | 'in-progress' | 'completed';
+export type StatusTaskType = 'to-do' | 'done';
 
 export enum StatusTextEnum {
-    'not-started' = 'Не начато',
-    'in-progress' = 'В процессе',
-    'completed' = 'Завершено'
+    'to-do' = 'Не выполнено',
+    'done' = 'Выполнено'
 }

@@ -8,7 +8,8 @@ export const colors = {
 
 export const borders = {
     styles: {
-        blackSm: `1px solid ${colors.blackTotal}`
+        blackSm: `1px solid ${colors.blackTotal}`,
+        lightGraySm: `1px solid ${colors.lightGray}`
     },
     radius: {
         small: "5px",
