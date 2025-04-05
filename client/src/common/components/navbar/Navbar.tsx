@@ -17,15 +17,10 @@ const navList: INavList[] = [
         icon: tasksImg
     },
     {
-        title: "Неделя",
-        to: '/tasks/week',
+        title: "Задачи",
+        to: '/tasks/shedule',
         icon: tasksImg
-    },
-    {
-        title: "Месяц",
-        to: '/tasks/month',
-        icon: tasksImg
-    },
+    }
 ]
 
 export default function Navbar() {

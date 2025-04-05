@@ -1,8 +1,7 @@
 import DayTasks from "@/common/components/tasks/DayTasks";
-import MonthTasks from "@/common/components/tasks/MonthTasks";
-import WeekTasks from "@/common/components/tasks/WeekTasks";
 import MainLayout from "@/common/layouts/MainLayout";
 import Home from "@/pages/Home";
+import Schedule from "@/pages/Shedule";
 import Tasks from "@/pages/Tasks";
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 
@@ -15,8 +14,7 @@ export default function RoutesProvider() {
                     {/* ToDo: возможно реализовать через параметр */}
                     <Route path="tasks" element={<Tasks />}>
                         <Route path="day" element={<DayTasks />}/>
-                        <Route path="week" element={<MonthTasks />}/>
-                        <Route path="month" element={<WeekTasks />}/>
+                        <Route path="shedule" element={<Schedule />}/>
                     </Route>
                 </Route>
             </>
