@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { tasks } from "@/common/mock/tasks";
 import TaskList from "@/common/components/tasks/TaskList";
 import { borders, colors, transitions } from "@/common/styles/styleConstants";
+import ScheduleFilters from "@/common/components/shedule/ScheduleFilters";
 
 const currentTasks = tasks;
 
@@ -24,6 +25,7 @@ export default function Schedule() {
                 >
                     Месяц
                 </PeriodButton>
+                <ScheduleFilters />
             </PeriodSwitcher>
 
             <TaskList list={currentTasks} />

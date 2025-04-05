@@ -1,7 +1,7 @@
 import DayTasks from "@/common/components/tasks/DayTasks";
 import MainLayout from "@/common/layouts/MainLayout";
 import Home from "@/pages/Home";
-import Schedule from "@/pages/Shedule";
+import Schedule from "@/pages/Schedule";
 import Tasks from "@/pages/Tasks";
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 
