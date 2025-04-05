@@ -6,7 +6,9 @@ export const colors = {
 };
 
 export const borders = {
-    styles: {},
+    styles: {
+        blackSm: `1px solid ${colors.blackTotal}`
+    },
     radius: {
         small: "5px",
         medium: "20px",

@@ -1,4 +1,4 @@
-import TaskList from '@/common/components/tasks/TaskList';
+import HomeTaskList from '@/common/components/home/HomeTaskList';
 import { fonts } from '@/common/styles/styleConstants';
 import styled from 'styled-components';
 
@@ -6,7 +6,7 @@ export default function Home() {
     return (
         <Wrapper>
             <Title>Задачи к которым нужно приступить</Title>
-            <TaskList />
+            <HomeTaskList />
         </Wrapper>
     )
 }

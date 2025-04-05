@@ -1,11 +1,19 @@
 import styled from 'styled-components';
+import { ITaskCard } from '@/common/components/tasks/types';
+import { TaskCard } from '@/common/components/tasks/TaskCard';
 
-export default function TaskList() {
+interface TaskListProps {
+    list: ITaskCard[]
+}
+
+export default function TaskList({ list }: TaskListProps) {
     return (
         <Wrapper>
             <List>
-                {[...Array(30)].map((_, i) => (
-                    <Item key={i}>Задача {i}</Item>
+                {list.map((task, i) => (
+                    <Item key={task.id || i}>
+                        <TaskCard task={task} />
+                    </Item>
                 ))}
             </List>
         </Wrapper>
