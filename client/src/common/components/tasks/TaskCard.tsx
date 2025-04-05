@@ -1,98 +1,99 @@
 import styled from 'styled-components';
-import { ITaskCard, PriorityTextEnum, StatusTextEnum } from '@/common/components/tasks/types';
-import { borders, colors } from '@/common/styles/styleConstants';
+import { ITaskCard, PriorityTaskType } from '@/common/components/tasks/types';
+import arrowImg from "@/common/images/svg/arrow-right.svg";
+import calendarImg from "@/common/images/svg/calendar.svg";
+import { borders, fonts } from '@/common/styles/styleConstants';
 
 interface TaskCardProps {
-    task: ITaskCard
+    task: ITaskCard;
 }
 
 export function TaskCard({ task }: TaskCardProps) {
-    const { title, deadline, priority, status } = task;
+    const { title, deadline, priority } = task;
 
-    const formatDeadline = (isoString: string) => {
-        const date = new Date(isoString);
-        return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    const formatDeadline = (value: string) => {
+        const date = new Date(value);
+        const today = new Date();
+        const isToday = date.toDateString() === today.toDateString();
+        return isToday ? 'Today' : date.toLocaleDateString();
     };
 
     return (
         <Card>
-            <Header>
-                <Title>{title}</Title>
-                {deadline && <Deadline>{formatDeadline(deadline)}</Deadline>}
-            </Header>
+            <TopRow>
+                <LeftSide>
+                    <Icon src={calendarImg} alt='calendar' />
+                    <Text>{formatDeadline(deadline)}</Text>
+                </LeftSide>
+                <Icon src={arrowImg} alt='arrow right' />
+            </TopRow>
 
-            <Inner>
-                <PriorityBadge $priority={priority}>
-                    {PriorityTextEnum[priority]}
-                </PriorityBadge>
-
-                <StatusBadge $status={status}>
-                    {StatusTextEnum[status]}
-                </StatusBadge>
-            </Inner>
+            <Title>{title}</Title>
+            <Priority $priority={priority}>
+                {priority === 'high' ? 'Высокий' : priority === 'medium' ? 'Средний' : "Низкий"} приоритет
+            </Priority>
         </Card>
     );
 }
 
+
 const Card = styled('div')`
-    width: 300px;
-    height: 150px;
-    border: ${borders.styles.blackSm};
-    border-radius: ${borders.radius.medium};
-    background-color: ${colors.whiteTotal};
-    padding: 10px;
+width: 250px;
+height: 150px;
+padding: 10px;
+background-color: #b2ebf2;
+border-radius: ${borders.radius.medium};
+display: flex;
+flex-direction: column;
+gap: 10px;
 `;
 
-const Header = styled('div')`
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 10px;
+const TopRow = styled('div')`
+display: flex;
+justify-content: space-between;
+align-items: center;
 `;
+
+const LeftSide = styled('div')`
+display: flex;
+align-items: center;
+gap: 5px;
+font-size: ${fonts.sizes.main};
+font-weight: ${fonts.weights.bold};
+`;
+
+const Text = styled('span')``;
 
 const Title = styled('h3')`
-    margin: 0;
-    font-size: 1.1rem;
-    color: #333;
+font-size: ${fonts.sizes.subtitle};
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+overflow: hidden;
+text-overflow: ellipsis;
 `;
 
-const Deadline = styled('span')`
-    white-space: nowrap;
+const Priority = styled('div') <{ $priority: PriorityTaskType}>`
+margin-top: auto;
+font-size: ${fonts.sizes.small};
+padding: 4px 8px;
+border-radius: ${borders.radius.small};
+width: fit-content;
+
+background-color: ${({ $priority }) => {
+    switch ($priority) {
+        case 'high':
+            return '#ffcdd2';
+        case 'medium':
+            return '#fff9c4';
+        case 'low':
+        default:
+            return '#b2e8b4';
+    }
+}};
 `;
 
-const Inner = styled('div')`
-    display: flex;
-    gap: 10px;
-`;
-
-const PriorityBadge = styled('span') <{ $priority: 'high' | 'medium' | 'low' }>`
-    padding: 4px 8px;
-    border-radius: 4px;
-
-    background-color: ${({ $priority }) => {
-        switch ($priority) {
-            case 'high':
-                return `#ffebee`;
-            case 'medium':
-                return `#fff8e1`;
-            case 'low':
-                return `#e8f5e9`;
-        }
-    }};
-`;
-
-const StatusBadge = styled('span') <{ $status: 'not-started' | 'in-progress' | 'completed' }>`
-    padding: 4px 8px;
-    border-radius: 4px;
-
-    background-color: ${({ $status }) => {
-        switch ($status) {
-            case 'not-started':
-                return `#f5f5f5`;
-            case 'in-progress':
-                return `#e3f2fd`;
-            case 'completed':
-                return `#e8f5e9`;
-        }
-    }};
+const Icon = styled('img')`
+width: 20px;
+aspect-ratio: 1;
 `;

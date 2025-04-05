@@ -10,6 +10,7 @@ box-sizing: border-box;
 }
 
 body {
+font-family: 'Inter', sans-serif;
 line-height: 1.5;
 -webkit-font-smoothing: antialiased;
 }
