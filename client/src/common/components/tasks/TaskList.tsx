@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { ITaskCard } from '@/common/components/tasks/types';
-import { TaskCard } from '@/common/components/tasks/TaskCard';
+import { TaskCard } from '@/common/components/tasks/task-card/TaskCard';
 
 interface TaskListProps {
     list: ITaskCard[]

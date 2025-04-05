@@ -4,14 +4,14 @@ export const tasks: ITaskCard[] = [
     {
         id: 1,
         title: "Завершить проект",
-        deadline: "2023-12-31T18:00:00",
+        deadline: "2025-04-05T23:00:00",
         priority: "high",
         status: "in-progress"
     },
     {
         id: 2,
         title: "Подготовить презентацию",
-        deadline: "2023-11-15T14:30:00",
+        deadline: "2025-04-06T14:30:00",
         priority: "medium",
         status: "not-started"
     },
