@@ -4,6 +4,8 @@ import calendarImg from "@/common/images/svg/calendar.svg";
 import { borders, fonts } from '@/common/styles/styleConstants';
 import { formatSmartDateHelper } from '@/common/helpers/formatSmartDateHelper';
 import TaskCardActions from '@/common/components/tasks/task-card/TaskCardActions';
+import { useState } from 'react';
+import EditTaskModal from '@/common/components/tasks/EditTaskModal';
 
 interface TaskCardProps {
     task: ITaskCard;
@@ -11,15 +13,21 @@ interface TaskCardProps {
 
 export function TaskCard({ task }: TaskCardProps) {
     const { title, deadline, priority } = task;
+    const [isEdit, setIsEdit] = useState(false);
+
+    const handleEdit = () => {
+        setIsEdit(prev => !prev);
+    }
 
     return (
         <Card $priority={priority}>
+            {isEdit && <EditTaskModal task={task} onClose={handleEdit} />}
             <TopRow>
                 <LeftSide>
                     <Icon src={calendarImg} alt='calendar' />
                     <Text>{formatSmartDateHelper(deadline)}</Text>
                 </LeftSide>
-                <TaskCardActions />
+                <TaskCardActions openEditModal={handleEdit} />
             </TopRow>
 
             <Title>{title}</Title>
