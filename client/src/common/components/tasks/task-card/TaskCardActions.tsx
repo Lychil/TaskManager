@@ -2,8 +2,14 @@ import styled from 'styled-components';
 import editImg from "@/common/images/svg/edit.svg";
 import binImg from "@/common/images/svg/bin.svg";
 
-export default function TaskCardActions() {
-    const handleEdit = () => {}
+interface TaskCardActionsProps {
+    openEditModal: () => void
+}
+
+export default function TaskCardActions({openEditModal}: TaskCardActionsProps) {
+    const handleEdit = () => {
+        openEditModal();
+    }
     const handleDelete = () => {}
 
     return (
