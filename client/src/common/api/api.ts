@@ -3,7 +3,7 @@ import { ITaskCard } from "@/common/components/tasks/types";
 import { getWeekRangeHelper } from "@/common/helpers/getWeekRangeHelper";
 import { getMonthRangeHelper } from "@/common/helpers/getMonthRangeHelper";
 
-const BASE_URL = "https://67f21b38c733555e24aec64c.mockapi.io/api/"
+const BASE_URL = "http://localhost:3000/api"
 
 const client = axios.create({
     baseURL: BASE_URL,
