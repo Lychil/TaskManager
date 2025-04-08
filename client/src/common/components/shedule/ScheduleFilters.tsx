@@ -2,31 +2,29 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { borders, colors, fonts } from '@/common/styles/styleConstants';
 
-export default function ScheduleFilters() {
+interface ScheduleFiltersProps {
+    setFilters: React.Dispatch<React.SetStateAction<{
+        start: string;
+        end: string;
+    }>>
+}
+
+export default function ScheduleFilters({ setFilters }: ScheduleFiltersProps) {
     const [dateRange, setDateRange] = useState({ start: '', end: '' });
-    const [timeRange, setTimeRange] = useState({ start: '', end: '' });
 
     const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'start' | 'end') => {
         const updated = { ...dateRange, [type]: e.target.value };
         setDateRange(updated);
-        applyFilters(updated, timeRange);
-    };
-
-    const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'start' | 'end') => {
-        const updated = { ...timeRange, [type]: e.target.value };
-        setTimeRange(updated);
-        applyFilters(dateRange, updated);
     };
 
     const resetFilters = () => {
         const empty = { start: '', end: '' };
         setDateRange(empty);
-        setTimeRange(empty);
-        applyFilters(empty, empty);
+        setFilters(empty)
     };
 
-    const applyFilters = (dates: { start: string; end: string }, times: { start: string; end: string }) => {
-        console.log('Фильтры применены:', { dateRange: dates, timeRange: times });
+    const applyFilters = ({ start, end }: { start: string; end: string }) => {
+        setFilters({ start, end })
     };
 
     return (
@@ -38,16 +36,9 @@ export default function ScheduleFilters() {
                 <SmallInput type="date" value={dateRange.end} onChange={(e) => handleDateChange(e, 'end')} />
             </FilterBlock>
 
-            <FilterBlock>
-                <Label>Время:</Label>
-                <SmallInput type="time" value={timeRange.start} onChange={(e) => handleTimeChange(e, 'start')} />
-                <Separator>–</Separator>
-                <SmallInput type="time" value={timeRange.end} onChange={(e) => handleTimeChange(e, 'end')} />
-            </FilterBlock>
-
             <ButtonsBlock>
                 <TextButton type='button' onClick={resetFilters}>Сброс</TextButton>
-                <ApplyButton type='button' onClick={() => applyFilters(dateRange, timeRange)}>Применить</ApplyButton>
+                <ApplyButton type='button' onClick={() => applyFilters(dateRange)}>Применить</ApplyButton>
             </ButtonsBlock>
         </Wrapper>
     );

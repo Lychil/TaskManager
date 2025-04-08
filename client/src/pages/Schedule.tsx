@@ -1,14 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from 'styled-components';
-import { tasks } from "@/common/mock/tasks";
 import TaskList from "@/common/components/tasks/TaskList";
 import { borders, colors, transitions } from "@/common/styles/styleConstants";
 import ScheduleFilters from "@/common/components/shedule/ScheduleFilters";
-
-const currentTasks = tasks;
+import { ITaskCard } from "@/common/components/tasks/types";
+import { fetchMonthTasks, fetchRangeTasks, fetchWeekTasks } from "@/common/api/api";
 
 export default function Schedule() {
     const [period, setPeriod] = useState<'week' | 'month'>('week');
+    const [filters, setFilters] = useState<{start: string, end: string}>({start: '', end: ''})
+    const [tasks, setTasks] = useState<ITaskCard[]>([])
+
+    useEffect(() => {
+        const getTasks = async () => {
+            let response: ITaskCard[];
+            try {
+                if (filters.start) {
+                    response = await fetchRangeTasks(filters.start, filters.end);
+                }
+                else if (period === 'week') {
+                    response = await fetchWeekTasks();
+                } else {
+                    response = await fetchMonthTasks();
+                }
+                setTasks(response);
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getTasks();
+    }, [period, filters])
 
     return (
         <Wrapper>
@@ -25,10 +46,10 @@ export default function Schedule() {
                 >
                     Месяц
                 </PeriodButton>
-                <ScheduleFilters />
+                <ScheduleFilters setFilters={setFilters} />
             </PeriodSwitcher>
 
-            <TaskList list={currentTasks} />
+            <TaskList list={tasks} />
         </Wrapper>
     );
 };

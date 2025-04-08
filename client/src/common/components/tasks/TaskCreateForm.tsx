@@ -2,23 +2,31 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ITaskCard } from '@/common/components/tasks/types';
 import { borders, colors, fonts, transitions } from '@/common/styles/styleConstants';
+import { createTask } from '@/common/api/api';
+
+const clearTask: ITaskCard = {
+    title: '',
+    deadline: '',
+    priority: 'low',
+    status: 'to-do',
+};
 
 export default function TaskCreateForm() {
-    const [task, setTask] = useState<ITaskCard>({
-        title: '',
-        deadline: '',
-        priority: 'low',
-        status: 'to-do',
-    });
+    const [task, setTask] = useState<ITaskCard>(clearTask);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setTask((prevTask) => ({ ...prevTask, [name]: value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Созданная задача:', task);
+        try {
+            await createTask(task);
+            setTask(clearTask);
+        } catch (error) {
+            console.log(error)
+        }
     };
 
     return (
@@ -69,7 +77,7 @@ export default function TaskCreateForm() {
                     value={task.status}
                     onChange={handleChange}
                 >
-                    <option value="todo">Не выполнено</option>
+                    <option value="to-do">Не выполнено</option>
                     <option value="done">Выполнено</option>ы
                 </Select>
             </FormItem>

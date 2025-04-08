@@ -1,15 +1,30 @@
 import { fonts } from "@/common/styles/styleConstants";
 import styled from "styled-components"
 import TaskList from "@/common/components/tasks/TaskList";
-import { tasks } from "@/common/mock/tasks";
 import TasksSlider from "@/common/components/tasks/TasksSlider";
+import { useEffect, useState } from "react";
+import { ITaskCard } from "@/common/components/tasks/types";
+import { fetchImportantWeekTasks } from "@/common/api/api";
 
 export default function DayTasks() {
+    const [weekTasks, setWeekTasks] = useState<ITaskCard[]>([])
+
+    useEffect(() => {
+        const getTasks = async () => {
+            try {
+                const response = await fetchImportantWeekTasks();
+                setWeekTasks(response);
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getTasks();
+    }, []);
     return (
         <Wrapper>
-            <TasksSlider title="Топ задач на текущую неделю" list={tasks} />
+            <TasksSlider title="Топ задач на текущую неделю" list={weekTasks} />
             <Title>Задачи на день</Title>
-            <TaskList list={tasks} />
+            <TaskList list={weekTasks} />
         </Wrapper>
     )
 }
