@@ -1,3 +1,4 @@
+// TaskCard.tsx
 import styled from 'styled-components';
 import { ITaskCard, PriorityColorEnum, PriorityTaskType } from '@/common/components/tasks/types';
 import calendarImg from "@/common/images/svg/calendar.svg";
@@ -9,35 +10,46 @@ import EditTaskModal from '@/common/components/tasks/EditTaskModal';
 
 interface TaskCardProps {
     task: ITaskCard;
+    onTaskDeleted: (id: number) => void;
+    onTaskUpdated: (task: ITaskCard) => void;
 }
 
-export function TaskCard({ task }: TaskCardProps) {
-    const { title, deadline, priority } = task;
+export function TaskCard({ task, onTaskDeleted, onTaskUpdated }: TaskCardProps) {
+    const [currentTask, setCurrentTask] = useState(task);
     const [isEdit, setIsEdit] = useState(false);
 
     const handleEdit = () => {
         setIsEdit(prev => !prev);
-    }
+    };
+
+    const handleTaskChange = (updatedTask: ITaskCard) => {
+        setCurrentTask(updatedTask);
+        onTaskUpdated(updatedTask);
+    };
 
     return (
-        <Card $priority={priority}>
-            {isEdit && <EditTaskModal task={task} onClose={handleEdit} />}
+        <Card $priority={currentTask.priority}>
+            {isEdit && <EditTaskModal task={task} onClose={handleEdit} onChange={handleTaskChange} />}
             <TopRow>
                 <LeftSide>
                     <Icon src={calendarImg} alt='calendar' />
-                    <Text>{formatSmartDateHelper(deadline)}</Text>
+                    <Text>{formatSmartDateHelper(currentTask.deadline)}</Text>
                 </LeftSide>
-                <TaskCardActions openEditModal={handleEdit} />
+                <TaskCardActions
+                    task={currentTask}
+                    openEditModal={handleEdit}
+                    onTaskDeleted={onTaskDeleted}
+                    onChange={handleTaskChange}
+                />
             </TopRow>
 
-            <Title>{title}</Title>
-            <Priority $priority={priority}>
-                {priority === 'high' ? 'Высокий' : priority === 'medium' ? 'Средний' : "Низкий"} приоритет
+            <Title>{currentTask.title}</Title>
+            <Priority $priority={currentTask.priority}>
+                {currentTask.priority === 'high' ? 'Высокий' : currentTask.priority === 'medium' ? 'Средний' : "Низкий"} приоритет
             </Priority>
         </Card>
     );
 }
-
 
 const Card = styled('div') <{ $priority: PriorityTaskType }>`
 width: 250px;

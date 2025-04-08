@@ -2,21 +2,33 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { ITaskCard } from '@/common/components/tasks/types';
 import { borders, colors, fonts } from '@/common/styles/styleConstants';
+import { updateTask } from '@/common/api/api';
 
 interface EditTaskModalProps {
     task: ITaskCard;
     onClose: () => void;
+    onChange: (task: ITaskCard) => void;
 }
 
-export default function EditTaskModal({task, onClose}: EditTaskModalProps) {
+export default function EditTaskModal({ task, onClose, onChange }: EditTaskModalProps) {
     const [updatedTask, setUpdatedTask] = useState<ITaskCard>({ ...task });
 
-    const handleChange = () => {
-        setUpdatedTask((prevTask) => ({...prevTask}));
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setUpdatedTask(prev => ({
+            ...prev,
+            [name]: value
+        }));
     };
 
-    const handleSave = () => {
-        onClose();
+    const handleSave = async () => {
+        try {
+            await updateTask(updatedTask);
+            onChange(updatedTask);
+            onClose();
+        } catch (error) {
+            console.log(error)
+        }
     };
 
     return (

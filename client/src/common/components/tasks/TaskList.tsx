@@ -1,15 +1,31 @@
+// TaskList.tsx
 import styled from 'styled-components';
 import { ITaskCard } from '@/common/components/tasks/types';
 import { TaskCard } from '@/common/components/tasks/task-card/TaskCard';
 import { borders } from '@/common/styles/styleConstants';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 
 interface TaskListProps {
     list: ITaskCard[]
 }
 
 export default function TaskList({ list }: TaskListProps) {
-    const toDoTasks = list.filter(task => task.status === 'to-do');
-    const doneTasks = list.filter(task => task.status === 'done');
+    const [tasks, setTasks] = useState<ITaskCard[]>(list);
+
+    useEffect(() => {
+        setTasks(list);
+    }, [list]);
+
+    const toDoTasks = useMemo(() => tasks.filter(task => task.status === 'to-do'), [tasks]);
+    const doneTasks = useMemo(() => tasks.filter(task => task.status === 'done'), [tasks]);
+
+    const handleTaskDeleted = useCallback((taskId: number) => {
+        setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+    }, []);
+
+    const handleTaskUpdated = useCallback((updatedTask: ITaskCard) => {
+        setTasks(prevTasks => prevTasks.map(task => task.id === updatedTask.id ? updatedTask : task));
+    }, []);
 
     return (
         <Wrapper>
@@ -18,7 +34,7 @@ export default function TaskList({ list }: TaskListProps) {
                     <ColumnTitle>Не выполнено</ColumnTitle>
                     <TasksColumn>
                         {toDoTasks.map((task, i) => (
-                            <TaskCard key={task.id || i} task={task} />
+                            <TaskCard key={task.id || i} task={task} onTaskDeleted={handleTaskDeleted} onTaskUpdated={handleTaskUpdated} />
                         ))}
                     </TasksColumn>
                 </Column>
@@ -27,13 +43,13 @@ export default function TaskList({ list }: TaskListProps) {
                     <ColumnTitle>Выполнено</ColumnTitle>
                     <TasksColumn>
                         {doneTasks.map((task, i) => (
-                            <TaskCard key={task.id || i} task={task} />
+                            <TaskCard key={task.id || i} task={task} onTaskDeleted={handleTaskDeleted} onTaskUpdated={handleTaskUpdated} />
                         ))}
                     </TasksColumn>
                 </Column>
             </ColumnsContainer>
         </Wrapper>
-    )
+    );
 }
 
 const Wrapper = styled('div')`

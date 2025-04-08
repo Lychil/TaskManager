@@ -27,11 +27,14 @@ export const fetchRangeTasks = async (start: string, end: string): Promise<ITask
     try {
         const response: AxiosResponse<ITaskCard[]> = await client.get('/tasks');
         const tasks: ITaskCard[] = response.data;
+        const startDate = new Date(start);
+        const endDate = new Date(end);
         const filteredTasks = tasks.filter((task) => {
-            const taskDeadline = new Date(task.deadline);
-            return taskDeadline >= new Date(start) && taskDeadline <= new Date(end);
+            if (!task.deadline) return false;
+            const taskDate = new Date(task.deadline);
+            endDate.setHours(23, 59, 59, 999);
+            return taskDate >= startDate && taskDate <= endDate;
         });
-
         return filteredTasks;
     } catch (error) {
         throw error;
@@ -60,22 +63,33 @@ export const fetchMonthTasks = async (): Promise<ITaskCard[]> => {
 
 export const fetchImportantTasks = async (): Promise<ITaskCard[]> => {
     try {
-        const tasks: ITaskCard[] = await client.get('/tasks?priority=high');
-        return tasks;
+        const tasks: AxiosResponse<ITaskCard[]> = await client.get('/tasks?priority=high&&status=to-do');
+        return tasks.data;
     } catch (error) {
         throw error;
     }
 }
 
 export const fetchImportantWeekTasks = async (): Promise<ITaskCard[]> => {
-    const {start, end} = getWeekRangeHelper();
+    const { start, end } = getWeekRangeHelper();
     try {
-        const tasks: ITaskCard[] = await client.get('/tasks?priority=high');
-        const filteredTasks = tasks.filter((task) => {
-            const taskDeadline = new Date(task.deadline);
-            return taskDeadline >= new Date(start) && taskDeadline <= new Date(end) && task.priority === "high";
+        const response: AxiosResponse<ITaskCard[]> = await client.get('/tasks?priority=high');
+        const tasks = response.data;
+
+        const startDate = new Date(start);
+        startDate.setHours(0, 0, 0, 0);
+
+        const endDate = new Date(end);
+        endDate.setHours(23, 59, 59, 999);
+
+        const weekTasks = tasks.filter(task => {
+            if (!task.deadline) return false;
+
+            const taskDate = new Date(task.deadline);
+            taskDate.setHours(0, 0, 0, 0);
+            return taskDate >= startDate && taskDate <= endDate;
         });
-        return filteredTasks;
+        return weekTasks;
     } catch (error) {
         throw error;
     }
@@ -90,7 +104,6 @@ export const createTask = async (taskData: ITaskCard): Promise<ITaskCard> => {
     }
 };
 
-// mockApi не позволяет обновлять и удалять данные, поэтому этому будет имитировано локально
 export const deleteTask = async (taskId: number): Promise<void> => {
     try {
         await client.delete(`/tasks/${taskId}`);
