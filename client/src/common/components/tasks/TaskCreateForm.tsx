@@ -13,6 +13,7 @@ const clearTask: ITaskCard = {
 
 export default function TaskCreateForm() {
     const [task, setTask] = useState<ITaskCard>(clearTask);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -21,11 +22,15 @@ export default function TaskCreateForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
+
         try {
             await createTask(task);
             setTask(clearTask);
         } catch (error) {
-            console.log(error)
+            console.log(error);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -78,53 +83,63 @@ export default function TaskCreateForm() {
                     onChange={handleChange}
                 >
                     <option value="to-do">Не выполнено</option>
-                    <option value="done">Выполнено</option>ы
+                    <option value="done">Выполнено</option>
                 </Select>
             </FormItem>
 
-            <Button type="submit">Создать задачу</Button>
+            <Button
+                type="submit"
+                disabled={isSubmitting}
+            >
+                {isSubmitting ? 'Отправка...' : 'Создать задачу'}
+            </Button>
         </FormContainer>
     );
 };
 
 const FormContainer = styled('form')`
-display: flex;
-flex-direction: column;
-row-gap: 20px;
-max-width: 400px;
-margin: 0 auto;
-padding: 20px;
-border-radius: ${borders.radius.medium};
-background-color: ${colors.lightGray};
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: ${borders.radius.medium};
+    background-color: ${colors.lightGray};
 `;
 
 const FormItem = styled('div')``;
 
 const Label = styled('label')`
-font-size: ${fonts.sizes.main};
-font-weight: ${fonts.weights.regular};
-margin-bottom: 10px;
+    font-size: ${fonts.sizes.main};
+    font-weight: ${fonts.weights.regular};
+    margin-bottom: 10px;
 `;
 
 const Input = styled('input')`
-width: 100%;
-padding: 5px 10px;
-border-radius: ${borders.radius.small};
+    width: 100%;
+    padding: 5px 10px;
+    border-radius: ${borders.radius.small};
 `;
 
 const Select = styled('select')`
-width: 100%;
-padding: 5px 10px;
-border-radius: ${borders.radius.small};
+    width: 100%;
+    padding: 5px 10px;
+    border-radius: ${borders.radius.small};
 `;
 
 const Button = styled('button')`
-padding: 10px 15px;
-border-radius: ${borders.radius.small};
-transition: ${transitions.fastTransition};
+    padding: 10px 15px;
+    border-radius: ${borders.radius.small};
+    transition: ${transitions.fastTransition};
 
-&:hover {
-    color: ${colors.whiteTotal};
-    background-color: ${colors.blackTransparent};
-}
+    &:hover {
+        color: ${colors.whiteTotal};
+        background-color: ${colors.blackTransparent};
+    }
+
+    &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
 `;
