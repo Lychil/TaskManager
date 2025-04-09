@@ -12,16 +12,6 @@ const client = axios.create({
     }
 })
 
-export const fetchDayTasks = async (): Promise<ITaskCard> => {
-    const date = new Date().toISOString().split('T')[0];
-    try {
-        const tasks: AxiosResponse<ITaskCard> = await client.get(`tasks?deadline=${date}`);
-        return tasks.data;
-    } catch (error) {
-        throw error;
-    }
-}
-
 
 export const fetchRangeTasks = async (start: string, end: string): Promise<ITaskCard[]> => {
     try {
@@ -40,6 +30,26 @@ export const fetchRangeTasks = async (start: string, end: string): Promise<ITask
         throw error;
     }
 };
+
+export const fetchDayTasks = async (): Promise<ITaskCard[]> => {
+    try {
+        const today = new Date();
+        const startDate = new Date(today.setHours(0, 0, 0, 0));
+        const endDate = new Date(today.setHours(23, 59, 59, 999));
+        const tasks: ITaskCard[] = await fetchRangeTasks(startDate.toString(), endDate.toString());
+
+        const filteredTasks = tasks.filter((task) => {
+            if (!task.deadline) return false;
+            const taskDate = new Date(task.deadline);
+            return taskDate >= startDate && taskDate <= endDate;
+        });
+
+        return filteredTasks;
+    } catch (error) {
+        throw error;
+    }
+};
+
 
 export const fetchWeekTasks = async (): Promise<ITaskCard[]> => {
     const { start, end } = getWeekRangeHelper();
