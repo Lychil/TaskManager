@@ -1,7 +1,7 @@
-// TaskCardActions.tsx
 import styled from 'styled-components';
 import editImg from "@/common/images/svg/edit.svg";
 import binImg from "@/common/images/svg/bin.svg";
+import arrowImg from "@/common/images/svg/arrow-right.svg";
 import { deleteTask, updateTask } from '@/common/api/api';
 import { ITaskCard, StatusTaskType } from '@/common/components/tasks/types';
 
@@ -48,7 +48,12 @@ export default function TaskCardActions({ task, openEditModal, onTaskDeleted, on
                 <Icon src={binImg} alt='delete' />
             </ActionBtn>
             <ActionBtn onClick={handleStatus} type='button'>
-                <Icon src={binImg} alt='toggle status' />
+                <Icon
+                    style={{ transform: `rotate(${task.status === 'done' ? 180 : 0}deg)` }}
+                    title={`Переместить в ${task.status === 'done' ? "не выполненные" : "выполненные"}`}
+                    src={arrowImg}
+                    alt='toggle status'
+                />
             </ActionBtn>
         </Wrapper>
     );

@@ -1,6 +1,5 @@
 import { borders, colors, fonts } from "@/common/styles/styleConstants";
 import styled from "styled-components";
-import HeaderCounter from "./HeaderCounter";
 
 export default function Header() {
     return (
@@ -8,7 +7,6 @@ export default function Header() {
             <Banner>
                 <Title>TaskManager</Title>
             </Banner>
-            <HeaderCounter />
         </Wrapper>
     )
 }
