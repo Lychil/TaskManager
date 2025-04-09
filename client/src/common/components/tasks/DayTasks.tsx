@@ -20,6 +20,7 @@ export default function DayTasks() {
         }
         getTasks();
     }, []);
+    
     return (
         <Wrapper>
             <TasksSlider title="Топ задач на текущую неделю" list={weekTasks} />
