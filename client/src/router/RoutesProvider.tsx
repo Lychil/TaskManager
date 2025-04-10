@@ -4,17 +4,18 @@ import Create from "@/pages/Create";
 import Home from "@/pages/Home";
 import Schedule from "@/pages/Schedule";
 import Tasks from "@/pages/Tasks";
-import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
+import { Navigate, Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 
 export default function RoutesProvider() {
     const router = createBrowserRouter(
         createRoutesFromElements(
             <>
-                <Route path="/" element={<MainLayout/>}>
+                <Route path="/" element={<MainLayout />}>
+                    <Route index element={<Navigate to="/home" replace />} />
                     <Route path="home" element={<Home />} />
                     <Route path="tasks" element={<Tasks />}>
-                        <Route path="day" element={<DayTasks />}/>
-                        <Route path="shedule" element={<Schedule />}/>
+                        <Route path="day" element={<DayTasks />} />
+                        <Route path="shedule" element={<Schedule />} />
                     </Route>
                     <Route path="create" element={<Create />} />
                 </Route>
